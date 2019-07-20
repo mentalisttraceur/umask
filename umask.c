@@ -43,13 +43,12 @@ char const help_text[] =
 static
 int error_unrecognized_option(char * option, char * arg0)
 {
-    if(fputs(arg0, stderr) == EOF
-    || fputs(": unrecognized option: ", stderr) == EOF
-    || fputs(option, stderr) == EOF)
+    if(fputs(arg0, stderr) != EOF
+    && fputs(": unrecognized option: ", stderr) != EOF
+    && fputs(option, stderr) != EOF)
     {
-        return EXIT_FAILURE;
+        fputc('\n', stderr);
     }
-    fputc('\n', stderr);
     return EXIT_FAILURE;
 }
 
@@ -57,11 +56,10 @@ int error_unrecognized_option(char * option, char * arg0)
 static
 int error_writing_output(char * arg0)
 {
-    if(fputs(arg0, stderr) == EOF)
+    if(fputs(arg0, stderr) != EOF)
     {
-        return EXIT_FAILURE;
+        perror(": error writing output");
     }
-    perror(": error writing output");
     return EXIT_FAILURE;
 }
 
@@ -69,13 +67,12 @@ int error_writing_output(char * arg0)
 static
 int error_parsing_umask(char * umask_string, char * arg0)
 {
-    if(fputs(arg0, stderr) == EOF
-    || fputs(": error parsing umask: ", stderr) == EOF
-    || fputs(umask_string, stderr) == EOF)
+    if(fputs(arg0, stderr) != EOF
+    && fputs(": error parsing umask: ", stderr) != EOF
+    && fputs(umask_string, stderr) != EOF)
     {
-        return EXIT_FAILURE;
+        fputc('\n', stderr);
     }
-    fputc('\n', stderr);
     return EXIT_FAILURE;
 }
 
@@ -83,12 +80,11 @@ int error_parsing_umask(char * umask_string, char * arg0)
 static
 int error_executing_command(char * command, char * arg0)
 {
-    if(fputs(arg0, stderr) == EOF
-    || fputs(": error executing command: ", stderr) == EOF)
+    if(fputs(arg0, stderr) != EOF
+    && fputs(": error executing command: ", stderr) != EOF)
     {
-        return EXIT_FAILURE;
+        perror(command);
     }
-    perror(command);
     return EXIT_FAILURE;
 }
 
@@ -96,26 +92,26 @@ int error_executing_command(char * command, char * arg0)
 static
 int print_help(char * arg0)
 {
-    if(fputs(help_text_prefix, stdout) == EOF
-    || fputs(arg0, stdout) == EOF
-    || fputs(help_text, stdout) == EOF
-    || fflush(stdout) == EOF)
+    if(fputs(help_text_prefix, stdout) != EOF
+    && fputs(arg0, stdout) != EOF
+    && fputs(help_text, stdout) != EOF
+    && fflush(stdout) != EOF)
     {
-        return error_writing_output(arg0);
+        return EXIT_SUCCESS;
     }
-    return EXIT_SUCCESS;
+    return error_writing_output(arg0);
 }
 
 
 static
 int print_version(char * arg0)
 {
-    if(fputs(version_text, stdout) == EOF
-    || fflush(stdout) == EOF)
+    if(fputs(version_text, stdout) != EOF
+    && fflush(stdout) != EOF)
     {
-        return error_writing_output(arg0);
+        return EXIT_SUCCESS;
     }
-    return EXIT_SUCCESS;
+    return error_writing_output(arg0);
 }
 
 
@@ -128,12 +124,12 @@ int print_umask_octal(char * arg0)
     mask_string[2] += 7 & (mask >> 3);
     mask_string[3] += 7 & (mask >> 0);
 
-    if(fputs(mask_string, stdout) == EOF
-    || fflush(stdout) == EOF)
+    if(fputs(mask_string, stdout) != EOF
+    && fflush(stdout) != EOF)
     {
-        return error_writing_output(arg0);
+        return EXIT_SUCCESS;
     }
-    return EXIT_SUCCESS;
+    return error_writing_output(arg0);
 }
 
 
@@ -164,12 +160,12 @@ int print_umask_symbolic(char * arg0)
     *ptr++ = '\n';
     *ptr = '\0';
 
-    if(fputs(mask_string, stdout) == EOF
-    || fflush(stdout) == EOF)
+    if(fputs(mask_string, stdout) != EOF
+    && fflush(stdout) != EOF)
     {
-        return error_writing_output(arg0);
+        return EXIT_SUCCESS;
     }
-    return EXIT_SUCCESS;
+    return error_writing_output(arg0);
 }
 
 
