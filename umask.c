@@ -41,10 +41,10 @@ char const help_text[] =
 
 
 static
-int error_unrecognized_option(char * option, char * arg0)
+int error_bad_option(char * option, char * arg0)
 {
     if(fputs(arg0, stderr) != EOF
-    && fputs(": unrecognized option: ", stderr) != EOF
+    && fputs(": bad option: ", stderr) != EOF
     && fputs(option, stderr) != EOF)
     {
         fputc('\n', stderr);
@@ -65,10 +65,10 @@ int error_writing_output(char * arg0)
 
 
 static
-int error_parsing_umask(char * umask_string, char * arg0)
+int error_bad_umask(char * umask_string, char * arg0)
 {
     if(fputs(arg0, stderr) != EOF
-    && fputs(": error parsing umask: ", stderr) != EOF
+    && fputs(": bad umask: ", stderr) != EOF
     && fputs(umask_string, stderr) != EOF)
     {
         fputc('\n', stderr);
@@ -344,7 +344,7 @@ int main(int argc, char * * argv)
         /* If it is *not* the "end of options" ("--") "option": */
         if(strcmp(arg, "-"))
         {
-            return error_unrecognized_option(arg - 1, arg0);
+            return error_bad_option(arg - 1, arg0);
         }
 
         /* Shift argv past the consumed option, leaving the umask: */
@@ -362,7 +362,7 @@ int main(int argc, char * * argv)
 
     if(!parse_and_set_umask(arg))
     {
-        return error_parsing_umask(arg, arg0);
+        return error_bad_umask(arg, arg0);
     }
 
     /* Shift argv past the umask, leaving just the command in argv: */
