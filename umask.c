@@ -14,6 +14,7 @@
 \*****************************************************************************/
 
 /* Standard C library headers */
+#include <errno.h> /* errno */
 #include <stdio.h> /* EOF, fputc, fputs, perror, stderr, stdout */
 #include <stdlib.h> /* EXIT_FAILURE, EXIT_SUCCESS */
 #include <string.h> /* strcmp */
@@ -56,8 +57,10 @@ int error_bad_option(char * option, char * arg0)
 static
 int error_writing_output(char * arg0)
 {
+    int errno_ = errno;
     if(fputs(arg0, stderr) != EOF)
     {
+        errno = errno_;
         perror(": error writing output");
     }
     return EXIT_FAILURE;
@@ -80,9 +83,11 @@ int error_bad_umask(char * umask_string, char * arg0)
 static
 int error_executing_command(char * command, char * arg0)
 {
+    int errno_ = errno;
     if(fputs(arg0, stderr) != EOF
     && fputs(": error executing command: ", stderr) != EOF)
     {
+        errno = errno_;
         perror(command);
     }
     return EXIT_FAILURE;
