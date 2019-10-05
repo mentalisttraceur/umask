@@ -29,7 +29,7 @@ char const version_text[] = "umask 1.0.0\n";
 
 char const help_text_prefix[] = "Usage: ";
 char const help_text[] =
-    " [OPTION|MASK COMMAND [ARGUMENT]...]\n"
+    " [OPTION] MASK COMMAND [ARGUMENT]...\n"
     "\n"
     "Execute a command with the given umask, which can be specified in\n"
     "in octal or symbolically. If no umask is given, print the current\n"
