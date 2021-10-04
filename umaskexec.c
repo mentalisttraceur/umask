@@ -16,9 +16,9 @@
 char const version_text[] = "umaskexec 1.0.0\n";
 
 char const help_text[] =
-    "Execute a command with the given umask, which can be specified in\n"
-    "in octal or symbolically. If no umask is given, print the current\n"
-    "umask. If no command is given, print what the new umask would be.\n"
+    "Execute a command with the given octal or symbolic umask.\n"
+    "If no umask is given, show the current umask. If no\n"
+    "command is given, show what the new umask would be.\n"
     "\n"
     "Usage:\n"
     "    umaskexec [--symbolic] <umask> [<command> [<argument>]...]\n"
