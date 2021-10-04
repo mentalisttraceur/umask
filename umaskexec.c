@@ -21,7 +21,7 @@ char const help_text[] =
     "command is given, show what the new umask would be.\n"
     "\n"
     "Usage:\n"
-    "    umaskexec [--symbolic] <umask> [<command> [<argument>]...]\n"
+    "    umaskexec [--symbolic] [<umask> [<command> [<argument>]...]]\n"
     "    umaskexec (--help | --version)\n"
     "\n"
     "Options:\n"
