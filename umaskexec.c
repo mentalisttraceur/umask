@@ -25,7 +25,6 @@ char const help_text[] =
     "    umaskexec (--help | --version)\n"
     "\n"
     "Options:\n"
-    "\n"
     "    -h, --help     Print this help text and exit.\n"
     "    -V, --version  Print version information and exit.\n"
     "    -S, --symbolic Print the umask symbolically instead of in octal.\n"
