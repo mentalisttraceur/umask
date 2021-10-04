@@ -19,7 +19,7 @@
 #include <stdlib.h> /* EXIT_FAILURE, EXIT_SUCCESS */
 #include <string.h> /* strcmp */
 
-/* Standard UNIX/Linux (POSIX/SUSv3 base) headers */
+/* Standard UNIX/Linux (POSIX/SUS base) headers */
 #include <sys/stat.h> /* umask */
 #include <sys/types.h> /* mode_t */
 #include <unistd.h> /* execvp */
