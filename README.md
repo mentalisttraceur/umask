@@ -1,9 +1,7 @@
-# `umask` (as an external command)
+# `umaskexec`
 
-A small command-line program for running a program with a given umask.
+`umaskexec` fills the gaps where `umask` is awkward of cannot reach.
 
-# Why?
-
-It nicely fills the gaps where the `umask` builtin of your shell cannot
-reach, and where invoking a new shell or other interpreter would be
-needlessly verbose and inconvenient - for example right after `sudo`.
+It executes a command with the given umask.
+If no umask is given, it shows the current umask.
+If no command is given, it shows what the new umask would be.
