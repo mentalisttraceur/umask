@@ -15,17 +15,20 @@
 
 char const version_text[] = "umaskexec 1.0.0\n";
 
-char const help_text_prefix[] = "Usage: ";
 char const help_text[] =
-    " [OPTION] MASK COMMAND [ARGUMENT]...\n"
-    "\n"
     "Execute a command with the given umask, which can be specified in\n"
     "in octal or symbolically. If no umask is given, print the current\n"
     "umask. If no command is given, print what the new umask would be.\n"
     "\n"
-    "  -h, --help     Print this help text and exit.\n"
-    "  -V, --version  Print version information and exit.\n"
-    "  -S, --symbolic Print the umask symbolically instead of in octal.\n"
+    "Usage:\n"
+    "    umaskexec [--symbolic] <umask> [<command> [<argument>]...]
+    "    umaskexec (--help | --version)
+    "\n"
+    "Options:\n"
+    "\n"
+    "    -h, --help     Print this help text and exit.\n"
+    "    -V, --version  Print version information and exit.\n"
+    "    -S, --symbolic Print the umask symbolically instead of in octal.\n"
 ;
 
 
@@ -85,9 +88,7 @@ int error_executing_command(char * command, char * arg0)
 static
 int print_help(char * arg0)
 {
-    if(fputs(help_text_prefix, stdout) != EOF
-    && fputs(arg0, stdout) != EOF
-    && fputs(help_text, stdout) != EOF
+    if(fputs(help_text, stdout) != EOF
     && fflush(stdout) != EOF)
     {
         return EXIT_SUCCESS;
