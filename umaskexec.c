@@ -163,7 +163,7 @@ int print_umask_symbolic(char * arg0)
 
 
 static
-int parse_and_set_octal_umask(char * mask_string)
+int parse_and_set_umask_octal(char * mask_string)
 {
     mode_t new_mask = 0;
     char c = *mask_string;
@@ -189,7 +189,7 @@ int parse_and_set_octal_umask(char * mask_string)
 
 
 static
-int parse_and_set_symbolic_umask(char * mask_string)
+int parse_and_set_umask_symbolic(char * mask_string)
 {
     /* umask bits combined by permission type: */
     mode_t static const r_bits = S_IRUSR | S_IRGRP | S_IROTH;
@@ -283,8 +283,8 @@ int parse_and_set_symbolic_umask(char * mask_string)
 static
 int parse_and_set_umask(char * mask_string)
 {
-    if(parse_and_set_octal_umask(mask_string)
-    || parse_and_set_symbolic_umask(mask_string))
+    if(parse_and_set_umask_octal(mask_string)
+    || parse_and_set_umask_symbolic(mask_string))
     {
         return 1;
     }
