@@ -22,7 +22,7 @@ char const help_text[] =
     "\n"
     "Usage:\n"
     "    umaskexec [--symbolic] [<umask> [<command> [<argument>]...]]\n"
-    "    umaskexec (--help | --version)\n"
+    "    umaskexec (--help | --version) [<ignored>]...\n"
     "\n"
     "Options:\n"
     "    -h --help      show this help text\n"
