@@ -130,28 +130,28 @@ static
 int print_umask_symbolic(char * arg0)
 {
     char mask_string[sizeof("u=rwx,g=rwx,o=rwx\n")];
-    char * ptr = mask_string;
+    char * next_character = mask_string;
     mode_t mask = umask(0);
 
-    *ptr++ = 'u';
-    *ptr++ = '=';
-    if(!(mask & S_IRUSR)) *ptr++ = 'r';
-    if(!(mask & S_IWUSR)) *ptr++ = 'w';
-    if(!(mask & S_IXUSR)) *ptr++ = 'x';
-    *ptr++ = ',';
-    *ptr++ = 'g';
-    *ptr++ = '=';
-    if(!(mask & S_IRGRP)) *ptr++ = 'r';
-    if(!(mask & S_IWGRP)) *ptr++ = 'w';
-    if(!(mask & S_IXGRP)) *ptr++ = 'x';
-    *ptr++ = ',';
-    *ptr++ = 'o';
-    *ptr++ = '=';
-    if(!(mask & S_IROTH)) *ptr++ = 'r';
-    if(!(mask & S_IWOTH)) *ptr++ = 'w';
-    if(!(mask & S_IXOTH)) *ptr++ = 'x';
-    *ptr++ = '\n';
-    *ptr = '\0';
+    *next_character++ = 'u';
+    *next_character++ = '=';
+    if(!(mask & S_IRUSR)) *next_character++ = 'r';
+    if(!(mask & S_IWUSR)) *next_character++ = 'w';
+    if(!(mask & S_IXUSR)) *next_character++ = 'x';
+    *next_character++ = ',';
+    *next_character++ = 'g';
+    *next_character++ = '=';
+    if(!(mask & S_IRGRP)) *next_character++ = 'r';
+    if(!(mask & S_IWGRP)) *next_character++ = 'w';
+    if(!(mask & S_IXGRP)) *next_character++ = 'x';
+    *next_character++ = ',';
+    *next_character++ = 'o';
+    *next_character++ = '=';
+    if(!(mask & S_IROTH)) *next_character++ = 'r';
+    if(!(mask & S_IWOTH)) *next_character++ = 'w';
+    if(!(mask & S_IXOTH)) *next_character++ = 'x';
+    *next_character++ = '\n';
+    *next_character = '\0';
 
     if(fputs(mask_string, stdout) == EOF
     || fflush(stdout) == EOF)
@@ -166,23 +166,23 @@ static
 int parse_and_set_umask_octal(char * mask_string)
 {
     mode_t new_mask = 0;
-    char c = *mask_string;
+    char character = *mask_string;
     do
     {
-        if(c < '0' || c > '7')
+        if(character < '0' || character > '7')
         {
             return 0;
         }
         new_mask <<= 3;
-        new_mask += c - '0';
+        new_mask += character - '0';
         if(new_mask > 0777)
         {
             return 0;
         }
         mask_string += 1;
-        c = *mask_string;
+        character = *mask_string;
     }
-    while(c != '\0');
+    while(character != '\0');
     umask(new_mask);
     return 1;
 }
@@ -208,18 +208,18 @@ int parse_and_set_umask_symbolic(char * mask_string)
     for(;;)
     {
         mode_t u_g_o_a_target = 0;
-        char c;
+        char character;
 
         for(;;)
         {
-            c = *mask_string++;
-            if(c == 'u') u_g_o_a_target |= u_bits;
+            character = *mask_string++;
+            if(character == 'u') u_g_o_a_target |= u_bits;
             else
-            if(c == 'g') u_g_o_a_target |= g_bits;
+            if(character == 'g') u_g_o_a_target |= g_bits;
             else
-            if(c == 'o') u_g_o_a_target |= o_bits;
+            if(character == 'o') u_g_o_a_target |= o_bits;
             else
-            if(c == 'a') u_g_o_a_target |= a_bits;
+            if(character == 'a') u_g_o_a_target |= a_bits;
             else
             break;
         }
@@ -233,7 +233,7 @@ int parse_and_set_umask_symbolic(char * mask_string)
         {
             int inverted = 0;
 
-            switch(c)
+            switch(character)
             {
                 case '=':
                     new_mask |= u_g_o_a_target;
@@ -250,16 +250,16 @@ int parse_and_set_umask_symbolic(char * mask_string)
 
             for(;;)
             {
-                c = *mask_string++;
+                character = *mask_string++;
 
                 /* Symbolic umask '-' sets bits in binary umask. '+' and '=' */
                 /* clear bits, which is setting bits on the inverted mask. */
 
-                if(c == 'r') new_mask |= r_bits & u_g_o_a_target;
+                if(character == 'r') new_mask |= r_bits & u_g_o_a_target;
                 else
-                if(c == 'w') new_mask |= w_bits & u_g_o_a_target;
+                if(character == 'w') new_mask |= w_bits & u_g_o_a_target;
                 else
-                if(c == 'x') new_mask |= x_bits & u_g_o_a_target;
+                if(character == 'x') new_mask |= x_bits & u_g_o_a_target;
                 else
                 break;
             }
@@ -269,13 +269,13 @@ int parse_and_set_umask_symbolic(char * mask_string)
                 new_mask = ~new_mask;
             }
 
-            if(c == '\0')
+            if(character == '\0')
             {
                 umask(new_mask);
                 return 1;
             }
         }
-        while(c != ',');
+        while(character != ',');
     }
 }
 
