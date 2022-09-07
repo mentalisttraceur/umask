@@ -192,15 +192,15 @@ static
 int parse_and_set_umask_symbolic(char * mask_string)
 {
     /* umask bits combined by permission type: */
-    mode_t static const r_bits = S_IRUSR | S_IRGRP | S_IROTH;
-    mode_t static const w_bits = S_IWUSR | S_IWGRP | S_IWOTH;
-    mode_t static const x_bits = S_IXUSR | S_IXGRP | S_IXOTH;
+    static mode_t const r_bits = S_IRUSR | S_IRGRP | S_IROTH;
+    static mode_t const w_bits = S_IWUSR | S_IWGRP | S_IWOTH;
+    static mode_t const x_bits = S_IXUSR | S_IXGRP | S_IXOTH;
 
     /* umask bits combined by who they apply to: */
-    mode_t static const u_bits = S_IRUSR | S_IWUSR | S_IXUSR;
-    mode_t static const g_bits = S_IRGRP | S_IWGRP | S_IXGRP;
-    mode_t static const o_bits = S_IROTH | S_IWOTH | S_IXOTH;
-    mode_t static const a_bits = u_bits | g_bits | o_bits;
+    static mode_t const u_bits = S_IRUSR | S_IWUSR | S_IXUSR;
+    static mode_t const g_bits = S_IRGRP | S_IWGRP | S_IXGRP;
+    static mode_t const o_bits = S_IROTH | S_IWOTH | S_IXOTH;
+    static mode_t const a_bits = u_bits | g_bits | o_bits;
 
     /* new umask starts as the old umask, then is updated: */
     mode_t new_mask = umask(0);
