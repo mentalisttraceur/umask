@@ -16,18 +16,18 @@
 char const version_text[] = "umaskexec 1.0.0\n";
 
 char const help_text[] =
-    "Execute a command with the given octal or symbolic umask.\n"
-    "If no umask is given, show the current umask.\n"
-    "If no command is given, show what the new umask would be.\n"
+    "Execute a command with the given file mode creation mask.\n"
+    "If no mask is given, show the current mask.\n"
+    "If no command is given, show what mask would be used.\n"
     "\n"
     "Usage:\n"
-    "    umaskexec [--symbolic | --] [<umask> [<command> [<argument>]...]]\n"
+    "    umaskexec [--symbolic | --] [<mask> [<command> [<argument>]...]]\n"
     "    umaskexec (--help | --version) [<ignored>]...\n"
     "\n"
     "Options:\n"
     "    -h --help      show this help text\n"
     "    -V --version   show version information\n"
-    "    -S --symbolic  show the umask symbolically instead of in octal\n"
+    "    -S --symbolic  show the mask symbolically instead of in octal\n"
 ;
 
 
