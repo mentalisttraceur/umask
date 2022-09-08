@@ -28,6 +28,12 @@ char const help_text[] =
     "    -h --help      show this help text\n"
     "    -V --version   show version information\n"
     "    -S --symbolic  show the mask symbolically instead of in octal\n"
+    "\n"
+    "Format:\n"
+    "    <mask>         <octal> | <symbolic>[,<symbolic>]...\n"
+    "    <symbolic>     [u|g|o|a]...((-|+|=)[r|w|x]...)...\n"
+    "    <octal>        [0]...[[<octal digit>]<octal digit>]<octal digit>\n"
+    "    <octal digit>  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7\n"
 ;
 
 
