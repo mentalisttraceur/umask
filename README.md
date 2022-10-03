@@ -1,6 +1,6 @@
 # `umaskexec`
 
-`umaskexec` fills the gaps where `umask` is awkward of cannot reach.
+`umaskexec` fills the gaps where `umask` is awkward or cannot reach.
 
 It executes a command with the given umask.
 If no umask is given, it shows the current umask.
