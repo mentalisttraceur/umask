@@ -34,6 +34,12 @@ char const help_text[] =
     "    <symbolic>     [u|g|o|a]...((-|+|=)[r|w|x]...)...\n"
     "    <octal>        [0]...[[<octal digit>]<octal digit>]<octal digit>\n"
     "    <octal digit>  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7\n"
+    "\n"
+    "Errors:\n"
+    "    bad option: <option>\n"
+    "    bad mask: <mask>\n"
+    "    error writing output: <...>\n"
+    "    error executing command: <command>: <...>\n"
 ;
 
 
