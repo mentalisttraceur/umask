@@ -64,11 +64,11 @@ int error_writing_output(char * arg0)
 
 
 static
-int error_bad_umask(char * umask_string, char * arg0)
+int error_bad_mask(char * mask_string, char * arg0)
 {
     if(fputs(arg0, stderr) != EOF
-    && fputs(": bad umask: ", stderr) != EOF
-    && fputs(umask_string, stderr) != EOF)
+    && fputs(": bad mask: ", stderr) != EOF
+    && fputs(mask_string, stderr) != EOF)
     {
         fputc('\n', stderr);
     }
@@ -115,7 +115,7 @@ int print_version(char * arg0)
 
 
 static
-int print_umask_octal(char * arg0)
+int print_mask_octal(char * arg0)
 {
     char mask_string[] = "0000\n";
     mode_t mask = umask(0);
@@ -133,7 +133,7 @@ int print_umask_octal(char * arg0)
 
 
 static
-int print_umask_symbolic(char * arg0)
+int print_mask_symbolic(char * arg0)
 {
     char mask_string[sizeof("u=rwx,g=rwx,o=rwx\n")];
     char * next_character = mask_string;
@@ -169,7 +169,7 @@ int print_umask_symbolic(char * arg0)
 
 
 static
-int parse_and_set_umask_octal(char * mask_string)
+int parse_and_use_mask_octal(char * mask_string)
 {
     mode_t new_mask = 0;
     char character = *mask_string;
@@ -195,20 +195,20 @@ int parse_and_set_umask_octal(char * mask_string)
 
 
 static
-int parse_and_set_umask_symbolic(char * mask_string)
+int parse_and_use_mask_symbolic(char * mask_string)
 {
-    /* umask bits combined by permission type: */
+    /* mask bits combined by permission type: */
     static mode_t const r_bits = S_IRUSR | S_IRGRP | S_IROTH;
     static mode_t const w_bits = S_IWUSR | S_IWGRP | S_IWOTH;
     static mode_t const x_bits = S_IXUSR | S_IXGRP | S_IXOTH;
 
-    /* umask bits combined by who they apply to: */
+    /* mask bits combined by who they apply to: */
     static mode_t const u_bits = S_IRUSR | S_IWUSR | S_IXUSR;
     static mode_t const g_bits = S_IRGRP | S_IWGRP | S_IXGRP;
     static mode_t const o_bits = S_IROTH | S_IWOTH | S_IXOTH;
     static mode_t const a_bits = u_bits | g_bits | o_bits;
 
-    /* new umask starts as the old umask, then is updated: */
+    /* new mask starts as the old mask, then is updated: */
     mode_t new_mask = umask(0);
 
     for(;;)
@@ -258,7 +258,7 @@ int parse_and_set_umask_symbolic(char * mask_string)
             {
                 character = *mask_string++;
 
-                /* Symbolic umask '-' sets bits in binary umask. '+' and '=' */
+                /* Symbolic mask '-' sets bits in binary mask. '+' and '=' */
                 /* clear bits, which is setting bits on the inverted mask. */
 
                 if(character == 'r') new_mask |= r_bits & u_g_o_a_target;
@@ -287,10 +287,10 @@ int parse_and_set_umask_symbolic(char * mask_string)
 
 
 static
-int parse_and_set_umask(char * mask_string)
+int parse_and_use_mask(char * mask_string)
 {
-    if(parse_and_set_umask_octal(mask_string)
-    || parse_and_set_umask_symbolic(mask_string))
+    if(parse_and_use_mask_octal(mask_string)
+    || parse_and_use_mask_symbolic(mask_string))
     {
         return 1;
     }
@@ -303,10 +303,10 @@ int main(int argc, char * * argv)
     char * arg;
     char * arg0 = *argv;
 
-    /* Function pointer holds octal or symbolic umask printing choice: */
-    int (* print_umask)(char * arg0) = print_umask_octal;
+    /* Function pointer holds octal or symbolic mask printing choice: */
+    int (* print_mask)(char * arg0) = print_mask_octal;
 
-    /* Without any arguments (two, counting argv[0]), just print the umask: */
+    /* Without any arguments (two, counting argv[0]), just print the mask: */
     if(argc < 2)
     {
         /* Many systems allow execution without even the zeroth argument: */
@@ -314,13 +314,13 @@ int main(int argc, char * * argv)
         {
             arg0 = "";
         }
-        return print_umask(arg0);
+        return print_mask(arg0);
     }
 
     /* The goal is to shift argv until it points to the command to execute: */
     argv += 1;
 
-    /* First argument is either an option (starts with '-') or the umask: */
+    /* First argument is either an option (starts with '-') or the mask: */
     arg = *argv;
 
     if(*arg == '-')
@@ -337,7 +337,7 @@ int main(int argc, char * * argv)
 
         if(!strcmp(arg, "-symbolic") || !strcmp(arg, "S"))
         {
-            print_umask = print_umask_symbolic;
+            print_mask = print_mask_symbolic;
         }
         else
         /* If it is *not* the "end of options" ("--") "option": */
@@ -346,25 +346,25 @@ int main(int argc, char * * argv)
             return error_bad_option(arg - 1, arg0);
         }
 
-        /* Shift argv past the consumed option, leaving the umask: */
+        /* Shift argv past the consumed option, leaving the mask: */
         argv += 1;
         arg = *argv;
 
-        /* No more arguments after parsing options? Print the umask: */
+        /* No more arguments after parsing options? Print the mask: */
         if(!arg)
         {
-            return print_umask(arg0);
+            return print_mask(arg0);
         }
     }
 
-    /* Now arg should be the umask. */
+    /* Now arg should be the mask. */
 
-    if(!parse_and_set_umask(arg))
+    if(!parse_and_use_mask(arg))
     {
-        return error_bad_umask(arg, arg0);
+        return error_bad_mask(arg, arg0);
     }
 
-    /* Shift argv past the umask, leaving just the command in argv: */
+    /* Shift argv past the mask, leaving just the command in argv: */
     argv += 1;
 
     arg = *argv;
@@ -372,8 +372,8 @@ int main(int argc, char * * argv)
 
     if(!arg)
     {
-        /* If no command was given, just print the new umask: */
-        return print_umask(arg0);
+        /* If no command was given, just print the new mask: */
+        return print_mask(arg0);
     }
 
     execvp(arg, argv);
